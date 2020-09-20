@@ -95,6 +95,15 @@ def computer_ctrl_c():
     win32api.keybd_event(17, 0, win32con.KEYEVENTF_KEYUP, 0)
     # print('ctrl_c')
 
+    
+    
+def computer_setText(aString):
+    #写入剪切板  
+    wincld.OpenClipboard()  
+    wincld.EmptyClipboard()  
+    wincld.SetClipboardText(aString)  
+    wincld.CloseClipboard()  
+
 
 # trl v
 def computer_ctrl_v():
