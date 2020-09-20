@@ -5,6 +5,7 @@
 
 __author__ = 'DD小鹏同学'
 
+import random
 import time
 import ctypes
 import sys, os, subprocess
@@ -15,18 +16,18 @@ import sys, os, subprocess
 from subprocess import Popen, PIPE
 import importlib, sys
 import win32clipboard as wincld
-from gtts import gTTS
+# from gtts import gTTS
 import os
-from moviepy.editor import *
-from moviepy.editor import VideoFileClip
-from moviepy import editor
+# from moviepy.editor import *
+# from moviepy.editor import VideoFileClip
+# from moviepy import editor
 from PIL import Image, ImageDraw, ImageFont
-import text_to_image
+# import text_to_image
 from PIL import Image, ImageFont, ImageDraw
 import os
 from PIL import Image, ImageFont, ImageDraw
 import datetime
-from moviepy.editor import *
+# from moviepy.editor import *
 importlib.reload(sys)
 import subprocess
 import os
@@ -42,11 +43,11 @@ import cv2
 import numpy as np
 import time
 from PIL import ImageGrab
-from moviepy.editor import *
-import shutil
-import pyttsx3
-import comtypes.client
-import shutil
+# from moviepy.editor import *
+# import shutil
+# import pyttsx3
+# import comtypes.client
+# import shutil
 
 
 def computer_click(x, y):
@@ -95,15 +96,6 @@ def computer_ctrl_c():
     win32api.keybd_event(17, 0, win32con.KEYEVENTF_KEYUP, 0)
     # print('ctrl_c')
 
-    
-    
-def computer_setText(aString):
-    #写入剪切板  
-    wincld.OpenClipboard()  
-    wincld.EmptyClipboard()  
-    wincld.SetClipboardText(aString)  
-    wincld.CloseClipboard()  
-
 
 # trl v
 def computer_ctrl_v():
@@ -114,6 +106,13 @@ def computer_ctrl_v():
     win32api.keybd_event(17, 0, win32con.KEYEVENTF_KEYUP, 0)
     # print('ctrl_v')
 
+
+def computer_setText(aString):
+    #写入剪切板  
+    wincld.OpenClipboard()  
+    wincld.EmptyClipboard()  
+    wincld.SetClipboardText(aString)  
+    wincld.CloseClipboard()  
 
 # enter
 def computer_enter():
@@ -216,6 +215,7 @@ def computer_prtsc(im_name):
     im = ImageGrab.grab()
     # 放到pic文件夹下
     im.save(im_name)
+    time.sleep(1)
 
 
 # 组合按键
@@ -330,7 +330,7 @@ def _get_track(distance):
 def _matchImg(imgsrc, imgobj):  # imgsrc=原始图像，imgobj=待查找的图片
     imsrc = ac.imread(imgsrc)
     imobj = ac.imread(imgobj)
-    match_result = ac.find_template(imsrc, imobj, 0.8)
+    match_result = ac.find_template(imsrc, imobj, 0.9)
     # 0.9、confidence是精度，越小对比的精度就越低 {'confidence': 0.5435812473297119,
     # 'rectangle': ((394, 384), (394, 416), (450, 384), (450, 416)), 'result': (422.0, 400.alipay_leave0)}
     if match_result is not None:
