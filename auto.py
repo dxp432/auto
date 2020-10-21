@@ -5,7 +5,6 @@
 
 __author__ = 'DD小鹏同学'
 
-import random
 import time
 import ctypes
 import sys, os, subprocess
@@ -16,18 +15,18 @@ import sys, os, subprocess
 from subprocess import Popen, PIPE
 import importlib, sys
 import win32clipboard as wincld
-# from gtts import gTTS
+from gtts import gTTS
 import os
-# from moviepy.editor import *
-# from moviepy.editor import VideoFileClip
-# from moviepy import editor
+from moviepy.editor import *
+from moviepy.editor import VideoFileClip
+from moviepy import editor
 from PIL import Image, ImageDraw, ImageFont
-# import text_to_image
+import text_to_image
 from PIL import Image, ImageFont, ImageDraw
 import os
 from PIL import Image, ImageFont, ImageDraw
 import datetime
-# from moviepy.editor import *
+from moviepy.editor import *
 importlib.reload(sys)
 import subprocess
 import os
@@ -43,11 +42,11 @@ import cv2
 import numpy as np
 import time
 from PIL import ImageGrab
-# from moviepy.editor import *
-# import shutil
-# import pyttsx3
-# import comtypes.client
-# import shutil
+from moviepy.editor import *
+import shutil
+import pyttsx3
+import comtypes.client
+import shutil
 
 
 def computer_click(x, y):
@@ -55,20 +54,27 @@ def computer_click(x, y):
     ctypes.windll.user32.SetCursorPos(x, y)
     ctypes.windll.user32.mouse_event(2, 0, 0, 0, 0)
     ctypes.windll.user32.mouse_event(4, 0, 0, 0, 0)
-    '''
-    MOUSE_LEFTDOWN = 0x0002     # left button down 
-    MOUSE_LEFTUP = 0x0004       # left button up 
-    MOUSE_RIGHTDOWN = 0x0008    # right button down 
-    MOUSE_RIGHTUP = 0x0010      # right button up 
-    MOUSE_MIDDLEDOWN = 0x0020   # middle button down 
-    MOUSE_MIDDLEUP = 0x0040     # middle button up 
-    '''
+'''
+MOUSE_LEFTDOWN = 0x0002     # left button down 
+MOUSE_LEFTUP = 0x0004       # left button up 
+MOUSE_RIGHTDOWN = 0x0008    # right button down 
+MOUSE_RIGHTUP = 0x0010      # right button up 
+MOUSE_MIDDLEDOWN = 0x0020   # middle button down 
+MOUSE_MIDDLEUP = 0x0040     # middle button up 
+'''
+
+def computer_right_click():
+    ''' 模拟电脑点击右键 '''
+    # ctypes.windll.user32.SetCursorPos(x, y)
+    ctypes.windll.user32.mouse_event(8, 0, 0, 0, 0)
+    ctypes.windll.user32.mouse_event(16, 0, 0, 0, 0)
+
 
 def computer_right_click(x, y):
     ''' 模拟电脑点击右键 '''
     ctypes.windll.user32.SetCursorPos(x, y)
     ctypes.windll.user32.mouse_event(8, 0, 0, 0, 0)
-    ctypes.windll.user32.mouse_event(10, 0, 0, 0, 0)
+    ctypes.windll.user32.mouse_event(16, 0, 0, 0, 0)
 
 
 # 双击
@@ -121,13 +127,6 @@ def computer_ctrl_v():
     # print('ctrl_v')
 
 
-def computer_setText(aString):
-    #写入剪切板  
-    wincld.OpenClipboard()  
-    wincld.EmptyClipboard()  
-    wincld.SetClipboardText(aString)  
-    wincld.CloseClipboard()  
-
 # enter
 def computer_enter():
     '''回车'''
@@ -175,12 +174,12 @@ def computer_matchImg_up_down(imgsrc, imgobj, my_img_height):
             if _matchImg('tmp_' + imgsrc, imgobj) is not None:
                 # myx = str(matchImg('tmp_' + imgsrc, imgobj)['result'][0])
                 # myy = str(matchImg('tmp_' + imgsrc, imgobj)['result'][1])
-                # os.popen('adb -s 66819679 shell input tap ' + myx + ' ' + myy, 'r', 1)
+                # os.popen('adb -s QMFDU20630010700 shell input tap ' + myx + ' ' + myy, 'r', 1)
                 # time.sleep(4)
                 myx = str(_matchImg('tmp_' + imgsrc, imgobj)['result'][0])
                 myy = str(_matchImg('tmp_' + imgsrc, imgobj)['result'][1])
                 myx_off = str(_matchImg('tmp_' + imgsrc, imgobj)['result'][0] - 0 )
-                # os.popen('adb -s 66819679 shell input tap ' + myx_off + ' ' + myy, 'r', 1)
+                # os.popen('adb -s QMFDU20630010700 shell input tap ' + myx_off + ' ' + myy, 'r', 1)
                 print(myx_off, myy)
                 computer_click(int(float(myx_off)), int(float(myy)))
                 time.sleep(0.5)
@@ -223,13 +222,27 @@ def computer_matchImgClick(myScreencap, mypng):
         print("-------------结束点击按钮。")
 
 
+# 对比图片并点击
+def computer_matchImg_right_Click(myScreencap, mypng):
+    '''对比图片并点击'''
+    if _matchImg(myScreencap, mypng) is not None:
+        print("-------------点击按钮！" + mypng + str(
+            _matchImg(myScreencap, mypng)['result'][0]) + ',' + str(
+            _matchImg(myScreencap, mypng)['result'][1]))
+        myx = str(_matchImg(myScreencap, mypng)['result'][0])
+        myy = str(_matchImg(myScreencap, mypng)['result'][1])
+        computer_right_click(int(float(myx)), int(float(myy)))
+        # time.sleep(3)
+        print("-------------结束点击按钮。")
+
+
+
 # 截图
 def computer_prtsc(im_name):
     '''截图 ：参数要加后缀，比如.png或者.jpg'''
     im = ImageGrab.grab()
     # 放到pic文件夹下
     im.save(im_name)
-    time.sleep(1)
 
 
 # 组合按键
@@ -241,6 +254,15 @@ def computer_key1_key2(key1, key2):
     # https://blog.csdn.net/zhanglidn013/article/details/35988381
     # https://docs.microsoft.com/zh-cn/windows/desktop/inputdev/virtual-key-codes
     ctypes.windll.user32.keybd_event(key2, 0, win32con.KEYEVENTF_KEYUP, 0)
+    ctypes.windll.user32.keybd_event(key1, 0, win32con.KEYEVENTF_KEYUP, 0)
+
+
+# 按下一个按钮
+def computer_one_key(key1):
+    '''模拟电脑键盘按下一个按键'''
+    ctypes.windll.user32.keybd_event(key1, 0, 0, 0)
+    # https://blog.csdn.net/zhanglidn013/article/details/35988381
+    # https://docs.microsoft.com/zh-cn/windows/desktop/inputdev/virtual-key-codes
     ctypes.windll.user32.keybd_event(key1, 0, win32con.KEYEVENTF_KEYUP, 0)
     '''
     A　　　65
@@ -335,15 +357,6 @@ def computer_key1_key2(key1, key2):
     Num Lock 　　　 144
     '''
 
-# 按下一个按钮
-def computer_one_key(key1):
-    '''模拟电脑键盘按下一个按键'''
-    ctypes.windll.user32.keybd_event(key1, 0, 0, 0)
-    # https://blog.csdn.net/zhanglidn013/article/details/35988381
-    # https://docs.microsoft.com/zh-cn/windows/desktop/inputdev/virtual-key-codes
-    ctypes.windll.user32.keybd_event(key1, 0, win32con.KEYEVENTF_KEYUP, 0)
-
-
 def press_one_key_2(key1):
     '''模拟电脑键盘按下一个按键（第二种方法）'''
     # win32api.keybd_event(0x0D, 0, 0, 0)
@@ -435,7 +448,7 @@ def _get_track(distance):
 def _matchImg(imgsrc, imgobj):  # imgsrc=原始图像，imgobj=待查找的图片
     imsrc = ac.imread(imgsrc)
     imobj = ac.imread(imgobj)
-    match_result = ac.find_template(imsrc, imobj, 0.9)
+    match_result = ac.find_template(imsrc, imobj, 0.8)
     # 0.9、confidence是精度，越小对比的精度就越低 {'confidence': 0.5435812473297119,
     # 'rectangle': ((394, 384), (394, 416), (450, 384), (450, 416)), 'result': (422.0, 400.alipay_leave0)}
     if match_result is not None:
@@ -476,7 +489,7 @@ def computer_del_file(path_data):
 #         myx = str(_matchImg(myScreencap, mypng)['result'][0])
 #         myy = str(_matchImg(myScreencap, mypng)['result'][1])
 #         _add_num(myScreencap, mypng, int(float(myx)), int(float(myy)))
-#         os.popen('adb -s 66819679 shell input tap ' + myx + ' ' + myy, 'r', 1)
+#         os.popen('adb -s QMFDU20630010700 shell input tap ' + myx + ' ' + myy, 'r', 1)
 #         print("-------------结束点击按钮。")
 #         return True
 #     else:
@@ -514,36 +527,38 @@ def phone_prtsc():
     '''手机截图，且保存名为phoneScreencap.png'''
     try:
         # 截图
-        os.popen('adb -s 66819679 shell screencap -p /storage/emulated/0/Pictures/Screenshots/phoneScreencap.png')
+        # os.popen('adb -s QMFDU20630010700 shell screencap -p /storage/emulated/0/Pictures/Screenshots/phoneScreencap.png')
+        os.popen('adb -s QMFDU20630010700 shell screencap -p /sdcard/Pictures/Screenshots/phoneScreencap.png')
         time.sleep(3)
         print("截图")
         # 发送到电脑
-        os.popen('adb -s 66819679 pull /storage/emulated/0/Pictures/Screenshots/phoneScreencap.png')
+        # os.popen('adb -s QMFDU20630010700 pull /storage/emulated/0/Pictures/Screenshots/phoneScreencap.png')
+        os.popen('adb -s QMFDU20630010700 pull /sdcard/Pictures/Screenshots/phoneScreencap.png')
         time.sleep(3)
     except Exception as e:
         print(e)
-        print("这里有个异常adb -s 66819679 shell screencap")
+        print("这里有个异常adb -s QMFDU20630010700 shell screencap")
 
 
 def phone_click(x, y):
     '''手机点击屏幕'''
-    my_string = 'adb -s 66819679 shell input tap ' + str(x) + ' ' + str(y)
+    my_string = 'adb -s QMFDU20630010700 shell input tap ' + str(x) + ' ' + str(y)
     os.popen(my_string)
 
 
 def phone_swipe(x1, y1, x2, y2):
     '''手机滑动'''
-    os.popen('adb -s 66819679 shell input swipe ' + str(x1) + ' '  + str(y1) + ' '  + str(x2) + ' '  + str(y2))
+    os.popen('adb -s QMFDU20630010700 shell input swipe ' + str(x1) + ' '  + str(y1) + ' '  + str(x2) + ' '  + str(y2))
 
 
 def phone_back():
     '''手机返回'''
-    os.popen('adb -s 66819679 shell input keyevent 4')
+    os.popen('adb -s QMFDU20630010700 shell input keyevent 4')
 
 
 def phone_home():
     '''按下手机的home按键'''
-    os.popen('adb -s 66819679 shell input keyevent 3', 'r', 1)
+    os.popen('adb -s QMFDU20630010700 shell input keyevent 3', 'r', 1)
 
 
 # 对比图片并点击
