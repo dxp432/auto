@@ -47,6 +47,15 @@ import shutil
 import pyttsx3
 import comtypes.client
 import shutil
+import pyperclip
+
+
+
+def computer_copy_2_paste(mystr):
+    '''把文字（支持中文）复制黏贴'''
+    pyperclip.copy(mystr)
+    computer_ctrl_v()
+
 
 
 def computer_click(x, y):
@@ -58,7 +67,7 @@ def computer_click(x, y):
 MOUSE_LEFTDOWN = 0x0002     # left button down 
 MOUSE_LEFTUP = 0x0004       # left button up 
 MOUSE_RIGHTDOWN = 0x0008    # right button down 
-MOUSE_RIGHTUP = 0x0010      # right button up 
+MOUSE_RIGHTUP = 0x0010 十六进制的10，即十进制的16     # right button up 
 MOUSE_MIDDLEDOWN = 0x0020   # middle button down 
 MOUSE_MIDDLEUP = 0x0040     # middle button up 
 '''
