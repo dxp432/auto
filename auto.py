@@ -231,6 +231,28 @@ def computer_matchImgClick(myScreencap, mypng):
         print("-------------结束点击按钮。")
 
 
+# 等待对比图片并点击
+def computer_matchImgClick_wait_2_click_immediately(mypng):
+    '''等待对比图片并点击，一出现就点击'''
+    find_it = False
+    while find_it == False:
+        computer_prtsc('myScreencap.png')
+        time.sleep(1)
+        if _matchImg('myScreencap.png', mypng) is not None:
+            print("-------------点击按钮！" + mypng + str(
+                _matchImg('myScreencap.png', mypng)['result'][0]) + ',' + str(
+                _matchImg('myScreencap.png', mypng)['result'][1]))
+            myx = str(_matchImg('myScreencap.png', mypng)['result'][0])
+            myy = str(_matchImg('myScreencap.png', mypng)['result'][1])
+            computer_click(int(float(myx)), int(float(myy)))
+            # time.sleep(3)
+            print("-------------结束点击按钮。")
+            find_it = True
+        else:
+            find_it = False
+
+
+
 # 对比图片并点击
 def computer_matchImg_right_Click(myScreencap, mypng):
     '''对比图片并点击'''
